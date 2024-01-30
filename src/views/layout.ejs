@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li class="<%= title === 'Página Inicial' ? 'active' : '' %>"><a href="/">Página Inicial</a></li>
+                <li class="<%= title === 'Livros' ? 'active' : '' %>"><a href="/livros">Livros</a></li>
+                <li class="<%= title === 'Registrar' ? 'active' : '' %>"><a href="/registro">Registrar</a></li>
+                <li class="<%= title === 'Login' ? 'active' : '' %>"><a href="/login">Login</a></li>
+                <li class="<%= title === 'Página Inicial' ? 'active' : '' %>"><a href="/">Página Inicial</a></li>
+                <!-- Adicione outros links de navegação -->
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <%- body %>
+    </main>
+    <footer>
+        <p>&copy; 2024 Marketplace de Livros</p>
+    </footer>
+</body>
+
+</html>

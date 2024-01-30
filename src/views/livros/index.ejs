@@ -1,0 +1,10 @@
+<h1>Marketplace de Livros</h1>
+<ul>
+    <% livros.forEach(livro=> { %>
+        <li>
+            <strong>
+                <%= livro.titulo %>
+            </strong> - <%= livro.autor %>
+        </li>
+        <% }); %>
+</ul>
