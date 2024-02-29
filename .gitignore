@@ -1,2 +1,3 @@
 .env
 buildCrytoKey.js
+node_modules

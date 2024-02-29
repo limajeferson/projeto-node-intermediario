@@ -3,7 +3,7 @@ const router = express.Router();
 
 const usuarioRoutes = require('./usuarioRoutes.js');
 const produtoRoutes = require('./produtoRoutes.js');
-const { authenticateToken } = require('../../config/authMiddleware');
+// const { authenticateToken } = require('../../config/authMiddleware');
 const { logRequest } = require('../../config/logMiddleware');
 
 // Middleware de logging global
@@ -21,6 +21,6 @@ router.use('/usuarios', usuarioRoutes);
 router.use('/produtos', produtoRoutes);
 
 // Middleware de autenticação global (aplicado apenas para rotas abaixo deste ponto)
-router.use(authenticateToken);
+// router.use(authenticateToken);
 
 module.exports = router;

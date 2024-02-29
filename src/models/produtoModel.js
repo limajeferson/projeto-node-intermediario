@@ -1,11 +1,17 @@
-const db = require('../../config/database.js');
+const db = require('../../config/database');
+
+/**
+ * * Livros
+ * * Categorias
+ * * Estoque
+ */
 
 class ProdutoModel {
-    static async criarProduto(nome, categoria, foto) {
-        const query = 'INSERT INTO Produtos (nome, categoria, foto) VALUES (?, ?, ?)';
+    static async criarProduto(isbn, titulo, autor, categoria_id, estoque_id) {
+        const query = 'INSERT INTO Livros (isbn, titulo, autor, categoria_id, estoque_id) VALUES (?, ?, ?, ?, ?)';
 
         return new Promise((resolve, reject) => {
-            db.run(query, [nome, categoria, foto], function (err) {
+            db.run(query, [isbn, titulo, autor, categoria_id, estoque_id], function (err) {
                 if (err) {
                     reject(err.message);
                 } else {
@@ -15,11 +21,11 @@ class ProdutoModel {
         });
     }
 
-    static async editarProduto(id, nome, categoria, foto) {
-        const query = 'UPDATE Produtos SET nome = ?, categoria = ?, foto = ? WHERE id_produto = ?';
+    static async editarProduto(id, isbn, titulo, autor, categoria_id, estoque_id) {
+        const query = 'UPDATE Livros SET isbn = ?, titulo = ?, autor = ?, categoria_id = ?, estoque_id = ? WHERE id_produto = ?';
 
         return new Promise((resolve, reject) => {
-            db.run(query, [nome, categoria, foto, id], function (err) {
+            db.run(query, [isbn, titulo, autor, categoria_id, estoque_id, id], function (err) {
                 if (err) {
                     reject(err.message);
                 } else {
@@ -30,7 +36,7 @@ class ProdutoModel {
     }
 
     static async excluirProduto(id) {
-        const query = 'DELETE FROM Produtos WHERE id_produto = ?';
+        const query = 'DELETE FROM Livros WHERE id_produto = ?';
 
         return new Promise((resolve, reject) => {
             db.run(query, [id], function (err) {
@@ -43,19 +49,139 @@ class ProdutoModel {
         });
     }
 
-    static async listarProdutos(categoria, id_usuario) {
-        let query = 'SELECT * FROM Produtos';
+    static async listarProdutos(categoria_id, autor) {
+        let query = 'SELECT * FROM Livros';
 
-        if (categoria) {
-            query += ' WHERE categoria = ?';
+        const params = [];
+
+        if (categoria_id) {
+            query += ' WHERE categoria_id = ?';
+            params.push(categoria_id);
         }
 
-        if (id_usuario) {
-            query += categoria ? ' AND id_usuario = ?' : ' WHERE id_usuario = ?';
+        if (autor) {
+            query += categoria_id ? ' AND autor = ?' : ' WHERE autor = ?';
+            params.push(autor);
         }
 
         return new Promise((resolve, reject) => {
-            const params = id_usuario ? [categoria, id_usuario] : [categoria];
+            db.all(query, params, (err, rows) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
+
+    static async criarCategoria(nome) {
+        const query = 'INSERT INTO Categorias (nome_categoria) VALUES (?)';
+
+        return new Promise((resolve, reject) => {
+            db.run(query, [nome], function (err) {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve({ id_categoria: this.lastID });
+                }
+            });
+        });
+    }
+
+    static async editarCategoria(id, nome) {
+        const query = 'UPDATE Categorias SET nome_categoria = ? WHERE id_categoria = ?';
+
+        return new Promise((resolve, reject) => {
+            db.run(query, [nome, id], function (err) {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve({ mensagem: 'Categoria editada com sucesso' });
+                }
+            });
+        });
+    }
+
+    static async excluirCategoria(id) {
+        const query = 'DELETE FROM Categorias WHERE id_categoria = ?';
+
+        return new Promise((resolve, reject) => {
+            db.run(query, [id], function (err) {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve({ mensagem: 'Categoria excluída com sucesso' });
+                }
+            });
+        });
+    }
+
+    static async listarCategorias() {
+        const query = 'SELECT * FROM Categorias';
+
+        return new Promise((resolve, reject) => {
+            db.all(query, (err, rows) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
+
+    static async criarEstoque(preco, quantidade, usuario_id, transacao_id) {
+        const query = 'INSERT INTO Estoque (preco, quantidade, usuario_id, transacao_id) VALUES (?, ?, ?, ?)';
+
+        return new Promise((resolve, reject) => {
+            db.run(query, [preco, quantidade, usuario_id, transacao_id], function (err) {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve({ id_estoque: this.lastID });
+                }
+            });
+        });
+    }
+
+    static async editarEstoque(id, preco, quantidade, usuario_id, transacao_id) {
+        const query = 'UPDATE Estoque SET preco = ?, quantidade = ?, usuario_id = ?, transacao_id = ? WHERE id_estoque = ?';
+
+        return new Promise((resolve, reject) => {
+            db.run(query, [preco, quantidade, usuario_id, transacao_id, id], function (err) {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve({ mensagem: 'Estoque editado com sucesso' });
+                }
+            });
+        });
+    }
+
+    static async excluirEstoque(id) {
+        const query = 'DELETE FROM Estoque WHERE id_estoque = ?';
+
+        return new Promise((resolve, reject) => {
+            db.run(query, [id], function (err) {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve({ mensagem: 'Estoque excluído com sucesso' });
+                }
+            });
+        });
+    }
+
+    static async listarEstoque(usuario_id) {
+        let query = 'SELECT * FROM Estoque';
+
+        if (usuario_id) {
+            query += ' WHERE usuario_id = ?';
+        }
+
+        return new Promise((resolve, reject) => {
+            const params = usuario_id ? [usuario_id] : [];
 
             db.all(query, params, (err, rows) => {
                 if (err) {

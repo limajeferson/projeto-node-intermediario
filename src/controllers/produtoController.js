@@ -1,21 +1,27 @@
 const ProdutoModel = require('../models/produtoModel');
+// const TituloModel = require('../models/tituloModel');
+// const AutorModel = require('../models/autorModel');
+// const CategoriaModel = require('../models/categoriaModel');
+
 
 class ProdutoController {
     static async cadastrarProduto(req, res) {
         try {
-            const { nome, categoria, foto } = req.body;
+            const { isbn, titulo, autor, categoria_id, estoque_id } = req.body;
 
             /*
             ///* Verificar se a categoria existe (pode ser uma validação adicional)
-            ///* Se não existir, pode ser criada ou a lógica desejada
-            const categoriaExistente = await CategoriaModel.obterCategoriaPorNome(categoria);
-            if (!categoriaExistente) {
-                await CategoriaModel.criarCategoria(categoria);
+            const tituloExistente = await TituloModel.obterTituloPorNome(titulo);
+            const autorExistente = await AutorModel.obterCAutorPorNome(autor);
+            const categoriaExistente = await CategoriaModel.obterCategoriaPorNome(categoria_id);
+
+            if (!titulo || !autor || !categoria_id) {
+                return res.status(400).json({ mensagem: 'Todos os campos são obrigatórios' });
             }
             */
 
-            // Criar produto
-            const novoProduto = await ProdutoModel.criarProduto(nome, categoria, foto);
+            // Cria o produto no banco de dados
+            const novoProduto = await ProdutoModel.criarProduto(isbn, titulo, autor, categoria_id, estoque_id);
 
             return res.status(201).json({ id_produto: novoProduto.id_produto });
         } catch (error) {
@@ -27,7 +33,7 @@ class ProdutoController {
     static async editarProduto(req, res) {
         try {
             const { id } = req.params;
-            const { nome, categoria, foto } = req.body;
+            const { isbn, titulo, autor, categoria_id, estoque_id } = req.body;
 
             // Verifica se o produto existe
             const produtoExistente = await ProdutoModel.obterProdutoPorId(id);
@@ -35,8 +41,8 @@ class ProdutoController {
                 return res.status(404).json({ mensagem: 'Produto não encontrado' });
             }
 
-            // Atualizar produto
-            await ProdutoModel.editarProduto(id, nome, categoria, foto);
+            // Atualiza o produto no banco de dados
+            await ProdutoModel.editarProduto(id, isbn, titulo, autor, categoria_id, estoque_id);
 
             return res.status(200).json({ mensagem: 'Produto editado com sucesso' });
         } catch (error) {
@@ -67,10 +73,10 @@ class ProdutoController {
 
     static async listarProdutos(req, res) {
         try {
-            const { categoria, id_usuario } = req.query;
+            const { categoria_id, autor } = req.query;
 
-            // Lista os produtos do banco de dados com base nos parâmetros fornecidos
-            const produtos = await ProdutoModel.listarProdutos(categoria, id_usuario);
+            // Lista os produtos do banco de dados com base nos filtros
+            const produtos = await ProdutoModel.listarProdutos(categoria_id, autor);
 
             return res.status(200).json({ produtos });
         } catch (error) {

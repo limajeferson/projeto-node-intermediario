@@ -12,11 +12,25 @@
 |   |-- public/  (para arquivos estáticos como imagens, CSS, etc.)
 |   |-- src/
 |   |   |-- controllers/
+|   |   |   |-- categoriaController.js
+|   |   |   |-- estoqueController.js
+|   |   |   |-- faturaController.js
+|   |   |   |-- itensPedidoController.js
+|   |   |   |-- pedidoController.js
 |   |   |   |-- produtoController.js
+|   |   |   |-- statusController.js
+|   |   |   |-- transacaoController.js
 |   |   |   |-- usuarioController.js
 |   |   |
 |   |   |-- models/
+|   |   |   |-- categoriaModel.js 
+|   |   |   |-- estoqueModel.js 
+|   |   |   |-- faturaModel.js 
+|   |   |   |-- itensModel.js 
+|   |   |   |-- pedidoModel.js 
 |   |   |   |-- produtoModel.js 
+|   |   |   |-- statusModel.js 
+|   |   |   |-- transacaoModel.js 
 |   |   |   |-- usuarioModel.js
 |   |   |
 |   |   |-- routes/

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UsuarioController = require('../controllers/usuarioController');
-const { authenticateToken } = require('../../config/authMiddleware');
+// const { authenticateToken } = require('../../config/authMiddleware');
 
 // Rota para exibir a página de registro
 router.get('/registro', UsuarioController.exibirPaginaRegistro);
